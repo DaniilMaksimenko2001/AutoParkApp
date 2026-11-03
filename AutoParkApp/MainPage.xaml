@@ -1,0 +1,120 @@
+﻿<Page x:Class="AutoParkApp.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AutoParkApp"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainPage"
+      Loaded="Page_Loaded"
+      KeepAlive="True">
+
+    <TabControl x:Name="Tabs">
+
+        <!-- ТРАНСПОРТ -->
+        <TabItem Header="Транспорт">
+            <StackPanel Margin="8">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Сортировка:" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="cbSort" Width="180" Margin="6,0" SelectedIndex="0"
+                              SelectionChanged="Sort_Changed">
+                        <ComboBoxItem Content="По умолчанию"/>
+                        <ComboBoxItem Content="Пробег ↑"/>
+                        <ComboBoxItem Content="Пробег ↓"/>
+                        <ComboBoxItem Content="Год выпуска ↑"/>
+                        <ComboBoxItem Content="Год выпуска ↓"/>
+                        <ComboBoxItem Content="Модель"/>
+                    </ComboBox>
+                    <Button Content="Добавить" Click="AddVehicle_Click" Margin="4,0"/>
+                    <Button Content="Изменить" Click="EditVehicle_Click" Margin="4,0"/>
+                    <Button Content="Удалить" Click="DeleteVehicle_Click" Margin="4,0"/>
+                    <Button Content="История рейсов" Click="VehicleHistory_Click" Margin="4,0"/>
+                </StackPanel>
+                <DataGrid x:Name="dgVehicles" AutoGenerateColumns="False" IsReadOnly="True"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Гос. номер" Binding="{Binding LicensePlate}"/>
+                        <DataGridTextColumn Header="Модель" Binding="{Binding Model}"/>
+                        <DataGridTextColumn Header="Производитель" Binding="{Binding Manufacturer}"/>
+                        <DataGridTextColumn Header="Год" Binding="{Binding YearOfManufacture}"/>
+                        <DataGridTextColumn Header="Пробег" Binding="{Binding Mileage}"/>
+                        <DataGridTextColumn Header="Статус" Binding="{Binding Status}"/>
+                        <DataGridTextColumn Header="ТО" Binding="{Binding ServiceBadge}"
+                                            Foreground="OrangeRed" FontWeight="Bold"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </TabItem>
+
+        <!-- ВОДИТЕЛИ -->
+        <TabItem Header="Водители">
+            <StackPanel Margin="8">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+                    <Button Content="Добавить" Click="AddDriver_Click" Margin="4,0"/>
+                    <Button Content="Изменить" Click="EditDriver_Click" Margin="4,0"/>
+                    <Button Content="Удалить" Click="DeleteDriver_Click" Margin="4,0"/>
+                    <Button Content="История рейсов" Click="DriverHistory_Click" Margin="4,0"/>
+                </StackPanel>
+                <DataGrid x:Name="dgDrivers" AutoGenerateColumns="False" IsReadOnly="True"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}"/>
+                        <DataGridTextColumn Header="Вод. удостоверение" Binding="{Binding LicenseNumber}"/>
+                        <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}"/>
+                        <DataGridTextColumn Header="Стаж" Binding="{Binding Experience}"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </TabItem>
+
+        <!-- РЕЙСЫ -->
+        <TabItem Header="Рейсы">
+            <StackPanel Margin="8">
+                <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                    <TextBlock Text="С:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dpFrom" Margin="4,0" SelectedDateChanged="Filter_Changed"/>
+                    <TextBlock Text="По:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dpTo" Margin="4,0" SelectedDateChanged="Filter_Changed"/>
+                    <ComboBox x:Name="cbVehicleFilter" Width="150" Margin="4,0"
+                              DisplayMemberPath="LicensePlate" SelectedValuePath="Id"
+                              SelectionChanged="Filter_Changed"/>
+                    <ComboBox x:Name="cbDriverFilter" Width="180" Margin="4,0"
+                              DisplayMemberPath="FullName" SelectedValuePath="Id"
+                              SelectionChanged="Filter_Changed"/>
+                    <Button Content="Сбросить" Click="ResetFilters_Click" Margin="4,0"/>
+                    <Button Content="Новый рейс" Click="AddRoute_Click" Margin="12,0,0,0"/>
+                </WrapPanel>
+                <DataGrid x:Name="dgRoutes" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ТС" Binding="{Binding Vehicle.LicensePlate}"/>
+                        <DataGridTextColumn Header="Водитель" Binding="{Binding Driver.FullName}"/>
+                        <DataGridTextColumn Header="Начало" Binding="{Binding StartDate, StringFormat=dd.MM.yyyy HH:mm}"/>
+                        <DataGridTextColumn Header="Конец" Binding="{Binding EndDate, StringFormat=dd.MM.yyyy HH:mm}"/>
+                        <DataGridTextColumn Header="Откуда" Binding="{Binding StartLocation}"/>
+                        <DataGridTextColumn Header="Куда" Binding="{Binding EndLocation}"/>
+                        <DataGridTextColumn Header="км" Binding="{Binding Distance}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </TabItem>
+
+        <!-- ОТЧЁТ -->
+        <TabItem Header="Отчёт по пробегу">
+            <StackPanel Margin="8">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+                    <Button Content="Сформировать отчёт Excel" Click="CreateReport" Padding="10,4"/>
+                </StackPanel>
+                <DataGrid x:Name="dgReport" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Гос. номер" Binding="{Binding LicensePlate}"/>
+                        <DataGridTextColumn Header="Рейсов" Binding="{Binding RoutesCount}"/>
+                        <DataGridTextColumn Header="Суммарный пробег по рейсам, км" Binding="{Binding TotalDistance}"/>
+                        <DataGridTextColumn Header="Пробег на одометре" Binding="{Binding Mileage}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Page>

@@ -1,0 +1,38 @@
+﻿<Page x:Class="AutoParkApp.VehicleEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AutoParkApp"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="VehicleEditPage">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20" Width="340" HorizontalAlignment="Center">
+            <TextBlock x:Name="tbTitle" FontSize="20" FontWeight="Bold" Margin="0,0,0,12"/>
+
+            <TextBlock Text="Гос. номер (А123ВС77)"/>
+            <TextBox Text="{Binding LicensePlate}" CharacterCasing="Upper"/>
+            <TextBlock Text="Модель" Margin="0,8,0,0"/>
+            <TextBox Text="{Binding Model}"/>
+            <TextBlock Text="Производитель" Margin="0,8,0,0"/>
+            <TextBox Text="{Binding Manufacturer}"/>
+            <TextBlock Text="Год выпуска" Margin="0,8,0,0"/>
+            <TextBox Text="{Binding YearOfManufacture}"/>
+            <TextBlock Text="Пробег, км" Margin="0,8,0,0"/>
+            <TextBox Text="{Binding Mileage}"/>
+            <TextBlock Text="Статус" Margin="0,8,0,0"/>
+            <ComboBox SelectedValue="{Binding Status}" SelectedValuePath="Content">
+                <ComboBoxItem Content="Доступен"/>
+                <ComboBoxItem Content="В ремонте"/>
+                <ComboBoxItem Content="В рейсе" IsEnabled="False"/>
+            </ComboBox>
+
+            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                <Button Content="Сохранить" Width="110" Click="Save_Click"/>
+                <Button Content="Назад" Width="110" Margin="10,0,0,0" Click="Back_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
